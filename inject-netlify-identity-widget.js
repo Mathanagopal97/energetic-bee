@@ -39,6 +39,10 @@ console.log(`[inject-netlify-identity-widget.js] injecting scripts`);
 indexHTMLData = injectHtmlBeforeHtml(indexHTMLData, '</head>', `<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>`);
 indexHTMLData = injectHtmlBeforeHtml(indexHTMLData, '</body>', `<script src="admin/netlify-identity.js"></script>`);
 
-fs.writeFileSync(indexHTMLFilePath, indexHTMLData, 'utf8');
-
-console.log(`[inject-netlify-identity-widget.js] done`);
+try {
+    fs.writeFileSync(indexHTMLFilePath, indexHTMLData, 'utf8');
+    console.log(`[inject-netlify-identity-widget.js] done`);
+} catch (error) {
+    console.error(`[inject-netlify-identity-widget.js] error writing to ${indexHTMLFilePath}: ${error.message}`);
+    throw error;
+}
