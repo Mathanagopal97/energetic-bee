@@ -1,6 +1,16 @@
 import React from "react"
 import PropTypes from "prop-types"
 
+// Simple HTML sanitizer function to prevent XSS attacks
+function sanitizeHtml(html) {
+  // Basic sanitization: Remove script tags and event handlers
+  if (!html) return "";
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/on\w+="[^"]*"/g, "")
+    .replace(/on\w+='[^']*'/g, "");
+}
+
 export default function HTML(props) {
   return (
     <html {...props.htmlAttributes}>
@@ -15,7 +25,7 @@ export default function HTML(props) {
         <div
           key={`body`}
           id="___gatsby"
-          dangerouslySetInnerHTML={{ __html: props.body }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(props.body) }}
         />
         {props.postBodyComponents}
       </body>
